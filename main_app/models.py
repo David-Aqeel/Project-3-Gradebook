@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-#Additional Comment
+#Additional Comment part 2
 from django.db import models
 from django.urls import reverse
 
