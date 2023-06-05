@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+#Additional Comment
 from django.db import models
 from django.urls import reverse
 
@@ -25,3 +26,4 @@ class Student(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'student_id': self.id})
+    
