@@ -31,15 +31,17 @@
           </ul>
           <ul class="right">
             <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'cohorts_create' %}">Add a Subject</a></li>
             <li><a href="{% url 'index' %}">View All Cohorts</a></li>
           </ul>
         </div>
       </nav>
     </header>
-    <main class="container">{% block content %} {% endblock %}</main>
+    <main class="container">{% block content %} 
+        {% endblock %}</main>
     <footer class="page-footer">
       <div class="right">
-        All Rights Reserved, &copy; 2022GradeBook &nbsp;
+        All Rights Reserved, &copy; 2022 GradeBook &nbsp;
       </div>
     </footer>
   </body>
