@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Cohorts
+from django.views.generic import ListView, DetailView
+from .models import Cohorts, Student
 
 
 # Create your views here.
@@ -12,3 +13,24 @@ def about(request):
 def cohorts_index(request):
     cohorts = Cohorts.objects.all()
     return render(request, 'cohorts/index.html', {'cohorts': cohorts})
+
+
+
+
+class StudentList(ListView):
+  model = Student
+
+class StudentDetail(DetailView):
+  model = Student
+
+class StudentCreate(CreateView):
+  model = Student
+  fields = '__all__'
+
+class StudentUpdate(UpdateView):
+  model = Student
+  fields = ['name', 'color']
+
+class StudentDelete(DeleteView):
+  model = Student
+  success_url = '/toys' 
