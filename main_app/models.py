@@ -10,4 +10,4 @@ class Cohorts(models.Model):
         return f'{self.subject_name} ({self.id})'
     
     def get_absolute_url(self):
-        return reserve('detail', kwargs={'cohort_id': self.id})
+        return reverse('detail', kwargs={'cohort_id': self.id})
