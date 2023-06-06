@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Cohort List</h1>
+
+{% for cohort in cohorts %}
+  <a href="{% url 'detail' cohort.id %}">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ cohort.subject_name }}</span>
+        <p>Note: {{ cohort.note }}</p>
+      </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}
