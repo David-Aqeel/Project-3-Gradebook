@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from .models import Cohorts
+from django.shortcuts import render, redirect
+from .models import Cohorts, Student_Grades
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 
@@ -33,3 +33,11 @@ class CohortUpdate(UpdateView):
 class CohortDelete(DeleteView):
   model = Cohorts
   success_url = '/cohorts'
+  
+
+def add_student_grades(request, cohort_id):
+    form = Student_Grades_Form(request.POST)
+    new_student_grades = form.save(commit=False)
+    new_student_grades.cohort_id = cohort_id
+    new_student_grades.save()
+    return redirect('detail', cohort_id=cohort_id)

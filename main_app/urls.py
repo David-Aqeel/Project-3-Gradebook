@@ -9,4 +9,5 @@ urlpatterns = [
     path('cohorts/create/', views.CohortCreate.as_view(), name='cohorts_create'),
     path('cohorts/<int:pk>/update/', views.CohortUpdate.as_view(), name='cohorts_update'),
     path('cohorts/<int:pk>/delete/', views.CohortDelete.as_view(), name='cohorts_delete'),
+    path('cohorts/<int:cohort_id>/add_student_grades/', views.add_student_grades, name='add_student_grades'),
 ]
