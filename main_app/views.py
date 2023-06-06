@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Cohorts, Student_Grades
+from .models import Cohorts, Student, Student_Grades
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 
@@ -34,6 +34,31 @@ class CohortDelete(DeleteView):
   model = Cohorts
   success_url = '/cohorts'
   
+
+
+def students_index(request):
+    students = Student.objects.all()
+    return render(request, 'main_app/student_list.html', {'students': students})
+
+
+# class StudentList(ListView):
+#   model = Student
+  
+
+class StudentDetail(DetailView):
+  model = Student
+
+class StudentCreate(CreateView):
+  model = Student
+  fields = '__all__'
+
+class StudentUpdate(UpdateView):
+  model = Student
+  fields = ['name', 'grade_level']
+
+class StudentDelete(DeleteView):
+  model = Student
+  success_url = '/students' 
 
 def add_student_grades(request, cohort_id):
     form = Student_Grades_Form(request.POST)
