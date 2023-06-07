@@ -10,10 +10,11 @@ urlpatterns = [
     path('cohorts/<int:pk>/update/', views.CohortUpdate.as_view(), name='cohorts_update'),
     path('cohorts/<int:pk>/delete/', views.CohortDelete.as_view(), name='cohorts_delete'),
     path('cohorts/<int:cohort_id>/add_student_grades/', views.add_student_grades, name='add_student_grades'),
-
     path('students/', views.students_index, name='students_index'),
     path('students/<int:pk>/', views.StudentDetail.as_view(), name='students_detail'),
     path('students/create/', views.StudentCreate.as_view(), name='students_create'),
     path('students/<int:pk>/update/', views.StudentUpdate.as_view(), name='students_update'),
     path('students/<int:pk>/delete/', views.StudentDelete.as_view(), name='students_delete'),
-] 
+    path('accounts/signup/', views.signup, name='signup'),
+    path('students/<int:student_id>/add_photo/', views.add_photo, name='add_photo'),
+]
