@@ -9,7 +9,7 @@ class Student_Grades_Form(ModelForm):
 
 
 
-class AssignmentForm(ModelForm):
+class Assignment_Form(ModelForm):
   class Meta:
     model = Assignment
     fields = ['date', 'assignment']
