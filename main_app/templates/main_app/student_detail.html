@@ -14,9 +14,6 @@
         <a href="{% url 'students_update' student.id %}">Edit</a>
         <a href="{% url 'students_delete' student.id %}">Delete</a>
       </div>
-      <div class="card-image">
-        <img src="path_to_image" alt="Student Image">
-      </div>
     </div>
      {% for photo in student.photo_set.all %}
       <img class="responsive-img card-panel" src="{{photo.url}}">
