@@ -29,6 +29,7 @@ class Cohorts(models.Model):
 class Assignment(models.Model):
   date = models.DateField('Due Date')
   assignment = models.CharField(max_length=100)
+  grade = models.IntegerField()
   cohort = models.ForeignKey(Cohorts, on_delete=models.CASCADE)
 
   def __str__(self):
