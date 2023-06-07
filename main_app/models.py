@@ -4,8 +4,8 @@ from django.urls import reverse
 # Create your models here.
 
 class Student(models.Model):
-  name = models.CharField(max_length=50)
-  grade_level = models.CharField(max_length=20)
+  name = models.CharField(max_length=75)
+  grade_level = models.IntegerField()
 
   def __str__(self):
     return self.name
@@ -25,6 +25,17 @@ class Cohorts(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'cohort_id': self.id})
+    
+class Assignment(models.Model):
+  date = models.DateField('Due Date')
+  assignment = models.CharField(max_length=100)
+  cohort = models.ForeignKey(Cohorts, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return f"{self.assignment()} on {self.date}"
+  
+  class Meta:
+    ordering = ['-date']
     
 class Student_Grades(models.Model):
     grade = models.IntegerField()
