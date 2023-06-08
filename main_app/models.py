@@ -41,12 +41,26 @@ class Cohorts(models.Model):
 #     ordering = ['-date']
     
 class Student_Grades(models.Model):
-    # grade = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(101)])
-    grade = models.CharField()
-    cohorts = models.ForeignKey(Cohorts, on_delete=models.CASCADE)
-    students = models.ForeignKey(Student, on_delete=models.CASCADE)
-
-    def __str__(self):
+  
+  GRADE_CHOICES = [
+        ('A+', 'A+'),
+        ('A', 'A'),
+        ('A-', 'A-'),
+        ('B+', 'B+'),
+        ('B', 'B'),
+        ('B-', 'B-'),
+        ('C+', 'C+'),
+        ('C', 'C'),
+        ('C-', 'C-'),
+        ('D+', 'D+'),
+        ('D', 'D'),
+        ('F', 'F'),
+    ]
+  grade = models.CharField(max_length=2, choices=GRADE_CHOICES)
+  cohorts = models.ForeignKey(Cohorts, on_delete=models.CASCADE)
+  students = models.ForeignKey(Student, on_delete=models.CASCADE)
+  
+  def __str__(self):
       return f"Grade: {self.grade} - Cohort: {self.cohorts} - Student: {self.students}"
    
         

@@ -34,8 +34,8 @@
 <div class="col s6">
   <div class="card">
     <div class="card-content">
-      <p>Total Grade: {{ total_grade}}</p>
-      <p>Student Grades: {{ student.cohort }}</p>
+      <p>GPA: {{ gpa }}</p>
+      <!-- <p>Student Grades: {{ student.cohort }}</p> -->
       <span class="card-title">Student Cohorts</span>
       {% if student_grades %}
         <ul>
@@ -51,6 +51,5 @@
     </div>
   </div>
 </div>
+{% endblock %}
 
-  {% endblock %}
-</div>

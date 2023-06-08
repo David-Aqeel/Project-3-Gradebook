@@ -5,20 +5,47 @@ from django.shortcuts import render, redirect
 from .models import Cohorts, Student, Student_Grades, Photo
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
-from .forms import Student_Grades_Form  #Assignment_Form
+from .forms import Student_Grades_Form  # Assignment_Form
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+def calculate_gpa(student_grades):
+    print('This is calculate_gpa')
+    print(student_grades)
+    grade_points = {
+        "A+": 4.0,
+        "A": 4.0,
+        "A-": 3.7,
+        "B+": 3.3,
+        "B": 3.0,
+        "B-": 2.7,
+        "C+": 2.3,
+        "C": 2.0,
+        "C-": 1.7,
+        "D+": 1.3,
+        "D": 1.0,
+        "F": 0.0,
+    }
 
-def calculate_total_grade(student_grades):
-    total_grade = 0
-    for grade in student_grades:
-        if grade.grade:
-            total_grade += int(grade.grade)
-    return total_grade
+    total_grades = len(student_grades)
+    if total_grades == 0:
+        return 0.0  # Return 0.0 if no grades are available
+
+    grade_sum = 0.0
+    total_subjects = len(set([grade.cohorts for grade in student_grades]))
+    print('This is  total_subjects')
+    print( total_subjects)
+
+    for student_grade in student_grades:
+        grade = student_grade.grade
+        grade_sum += grade_points.get(grade, 0.0)
+
+    gpa = grade_sum / total_subjects
+    return round(gpa, 2)
+
 
 # Create your views here.
 def home(request):
@@ -38,19 +65,48 @@ def cohorts_index(request):
 @login_required
 def cohorts_detail(request, cohort_id):
     cohort = Cohorts.objects.get(id=cohort_id)
+    print("These are cohort.students.all()")
+    print(cohort.students.all())
     id_list = cohort.students.all().values_list("id")
     students_cohort_doesnt_have = Student.objects.exclude(id__in=id_list)
-    # assigment_form = Assignment_Form()
+    student_grades = Student_Grades.objects.filter(cohorts=cohort_id)
+    #  {% for student_grade in student.student_grades.all %}
+    print("These are the student grades in the detail view")
+    print(student_grades)
+    #   {% if student_grade.cohorts_id == cohort.id %}
+    # print("These are student_grade.cohorts_id")
+    # print(student_grades[0])
+    # # <p>Grade: {{ student_grade.grade }}</p>
+    # print("These are student_grade.grade")
+    # print(student_grades[0].grade)
+
     return render(
         request,
         "cohorts/detail.html",
         {
             "cohort": cohort,
-            # "assigment_form": assigment_form,
-            "students": students_cohort_doesnt_have,
+            "students_cohort_doesnt_have": students_cohort_doesnt_have,
+            "student_grades": student_grades,
         },
     )
 
+
+# THIS IS NOT BEING USED AT ALL
+# def detail(request, cohort_id):
+#     cohort = Cohorts.objects.get(id=cohort_id)
+#     students = cohort.students.all()
+#     student_grades = Student_Grades.objects.filter(student__in=students)
+#     gpa = calculate_gpa(student_grades)
+
+
+#     context = {
+#         'cohort': cohort,
+#         'students': students,
+#         'student_grades': student_grades,
+#         'gpa': gpa
+#     }
+
+#     return render(request, 'cohorts/detail.html', context)
 
 # class CohortCreate(CreateView):
 #     id_list = cohort.students.all().values_list("id")
@@ -70,7 +126,7 @@ class CohortCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         # self.request.user is the logged in user
-        form.instance.teacher_id = self.request.user.id
+        form.instance.teacher = self.request.user
         # Let the CreateView's form_valid method
         # do its regular work (saving the object & redirecting)
         return super().form_valid(form)
@@ -112,16 +168,16 @@ def students_index(request):
 
 class StudentDetail(LoginRequiredMixin, DetailView):
     model = Student
-    
+
     def get_context_data(self, **kwargs):
-         context = super().get_context_data(**kwargs)
-         student = self.get_object()
-         student_grades = Student_Grades.objects.filter(students=student)
-         total_grade = calculate_total_grade(student_grades)
-         context["student_grades"] = student_grades
-         context["total_grade"] = total_grade
-         context["student_grades_form"] = Student_Grades_Form()
-         return context
+        context = super().get_context_data(**kwargs)
+        student = self.get_object()
+        student_grades = Student_Grades.objects.filter(students=student)
+        gpa = calculate_gpa(student_grades)
+        context["student_grades"] = student_grades
+        context["gpa"] = gpa
+        context["student_grades_form"] = Student_Grades_Form()
+        return context
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -159,41 +215,38 @@ class StudentDelete(LoginRequiredMixin, DeleteView):
 
 
 @login_required
-def add_student_grades(request, student_id):
-    form = Student_Grades_Form(request.POST)
-    new_student_grades = form.save(commit=False)
-    new_student_grades.student_id = student_id
-    new_student_grades.cohort_id = cohort_id
-    new_student_grades.save()
-    return redirect("students_detail", student_id=student_id)
+# def add_student_grades(request, student_id, cohort_id):
+#     form = Student_Grades_Form(request.POST)
+#     new_student_grades = form.save(commit=False)
+#     new_student_grades.student_id = student_id
+#     new_student_grades.cohort_id = cohort_id
+#     new_student_grades.save()
+#     return redirect("students_detail", pk=student_id)
 
-def detail(request, cohort_id):
-    cohort = Cohorts.objects.get(id=cohort_id)
-    students = cohort.students.all()
-    student_grades = StudentGrades.objects.filter(student__in=students)
-
-    context = {
-        'cohort': cohort,
-        'students': students,
-        'student_grades': student_grades,
-    }
-
-    return render(request, 'cohorts/detail.html', context)
-
+@login_required
 def add_grade(request, cohort_id, student_id):
-    if request.method == 'POST':
-        grade = request.POST['grade']
-        student = Student.objects.get(id=student_id)
-        cohort = Cohorts.objects.get(id=cohort_id)
-        student_grade = Student_Grades(grade=grade, cohorts=cohort, students=student)
-        student_grade.save()
-    return redirect('detail', cohort_id=cohort_id)
+    if request.method == "POST":
+        grade = request.POST["grade"]
+        print('This is add_grade')
+        print(grade)
+        # student = Student.objects.get(id=student_id)
+        # cohort = Cohorts.objects.get(id=cohort_id)
+        # student_grade = Student_Grades(grade=grade, cohorts=cohort, students=student)
+        # student_grade.save()
+        created = Student_Grades.objects.update_or_create(
+            students_id=student_id,
+            cohorts_id=cohort_id,
+            defaults={"grade":grade}
+            )
+    return redirect("detail", cohort_id=cohort_id)
 
-def delete_grade(request, cohort_id, grade_id):
-    if request.method == 'POST':
-        grade = Student_Grades.objects.get(id=grade_id)
-        grade.delete()
-    return redirect('detail', cohort_id=cohort_id)
+
+# def delete_grade(request, cohort_id, grade_id):
+#     if request.method == "POST":
+#         grade = Student_Grades.objects.get(id=grade_id)
+#         grade.delete()
+#     return redirect("detail", cohort_id=cohort_id)
+
 
 @login_required
 def add_photo(request, student_id):
@@ -229,5 +282,3 @@ def signup(request):
     form = UserCreationForm()
     context = {"form": form, "error_message": error_message}
     return render(request, "registration/signup.html", context)
-
-
