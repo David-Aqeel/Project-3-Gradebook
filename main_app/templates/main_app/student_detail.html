@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <h1>Students Details</h1>
 
@@ -15,16 +14,58 @@
         <a href="{% url 'students_delete' student.id %}">Delete</a>
       </div>
     </div>
-     {% for photo in student.photo_set.all %}
-      <img class="responsive-img card-panel" src="{{photo.url}}">
+    {% for photo in student.photo_set.all %}
+    <img class="responsive-img card-panel" src="{{photo.url}}" />
     {% empty %}
-      <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+    <div class="card-panel teal-text center-align">No Photos Uploaded</div>
     {% endfor %}
-    <form action="{% url 'add_photo' student.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+    <form
+      action="{% url 'add_photo' student.id %}"
+      enctype="multipart/form-data"
+      method="POST"
+      class="card-panel"
+    >
       {% csrf_token %}
-      <input type="file" name="photo-file">
-      <br><br>
+      <input type="file" name="photo-file" />
+      <br /><br />
       <button type="submit" class="btn">Upload Photo</button>
     </form>
   </div>
-    {% endblock %}
+<!-- 
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <p>Student Cohort: {{ student.cohort }}</p>
+        {% if cohorts %}
+        <ul>
+          {% for cohort in cohorts %}
+          <li>{{ cohort.name }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>This student is not currently enrolled in any cohorts/subjects.</p>
+        {% endif %} {% if student_grades %}
+        <ul>
+          {% for grade in student_grades %}
+          <li>
+            Grade: {{ grade.grade }} - Cohort: {{ grade.cohorts.name }} -
+            Student: {{ grade.students.name }}
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No grades available for this student.</p>
+        {% endif %}
+
+        <span class="card-title">Add Student Grades</span>
+        <form action="{% url 'add_student_grades' student.id %}" method="POST">
+          {% csrf_token %}
+          <!-- Render the inputs -->
+          <!-- {{ student_grades_form.as_p }}
+          <!-- <input type="submit" class="btn" value="Submit" />
+        </form>
+      </div>
+    </div> -->
+  </div> 
+  {% endblock %}
+</div>

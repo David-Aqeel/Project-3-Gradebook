@@ -1,6 +1,7 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+{% block content %}
 
-<h1>Cohorts Details</h1>
+<h1>Cohort Details</h1>
 
 <div class="row">
   <div class="col s6">
@@ -15,61 +16,50 @@
       </div>
     </div>
   </div>
-
-  <div class="col s6">
-    <form action="{% url 'add_assignment' cohort.id %}" method="POST">
-      {% csrf_token %}
-      <!-- Render the inputs -->
-      {{ assignment_form.as_p }}
-      <input type="submit" class="btn" value="Add Assignment">
-    </form>
-    <!-- <br>
-    {% if cohort.fed_for_today %}
-      <div class="card-panel teal-text center-align">{{cohort.name}} has been fed all meals for today</div>
-    {% else %}
-      <div class="card-panel red-text center-align">{{cat.name}} might be hungry</div>
-    {% endif %} -->
-    <table class="striped">
-      <thead>
-        <tr><th>Date</th><th>Assignment</th></tr>
-      </thead>
-      <tbody>
-        {% for assignment in cohorts.assignment_set.all %}
-          <tr>
-            <td>{{assignment.date}}</td>
-            <td>{{assignment.assignment}}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
 </div>
 
-    <hr>
+<hr>
+
 <div class="row">
   <div class="col s6">
-    <h3>{{ cohort.subject_name }}'s Students</h3>
-    {% if cohort.students.count %}
-      {% for student in cohort.students.all %}
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">
-              <!-- A <span style="color: {{ toy.color }}">{{ toy.color }}</span> {{ toy.name }} -->
-              {{ student.name }}
-            </span>
-          </div>
-          <div class="card-action">
-            <form action="{% url 'unassoc_student' cohort.id student.id %}" method="POST">
+<h3>{{ cohort.subject_name }}'s Students</h3>
+{% if cohort.students.count %}
+  {% for student in cohort.students.all %}
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">
+          {{ student.name }}
+        </span>
+        {% for student_grade in student.student_grades.all %}
+          {% if student_grade.cohorts_id == cohort.id %}
+            <p>Grade: {{ student_grade.grade }}</p>
+            <form action="{% url 'delete_grade' cohort.id student_grade.id %}" method="POST">
               {% csrf_token %}
-              <button type="submit" class="btn">Remove</button>
+              <button type="submit" class="btn">Delete Grade</button>
             </form>
-          </div>
-        </div>
-      {% endfor %}
-    {% else %}
-      <h5>No Students 👨🏼‍🏫</h5>
-    {% endif %}
+          {% endif %}
+        {% empty %}
+          <form action="{% url 'add_grade' cohort.id student.id %}" method="POST">
+            {% csrf_token %}
+            <label for="grade_input">Enter Grade:</label>
+            <input type="number" name="grade" id="grade_input">
+            <button type="submit" class="btn">Add Grade</button>
+          </form>
+        {% endfor %}
+      </div>
+      <div class="card-action">
+        <form action="{% url 'unassoc_student' cohort.id student.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn">Remove</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <h5>No Students 👨🏼‍🏫</h5>
+{% endif %}
   </div>
+
   <div class="col s6">
     <h3>Available Students</h3>
     {% if students.count %}
@@ -89,22 +79,22 @@
         </div>
       {% endfor %}
     {% else %}
-      <h5>{{cohort.name}} Already Has All Available Students</h5>
+      <h5>{{ cohort.name }} Already Has All Available Students</h5>
     {% endif %}
   </div>
 </div>
 
-    <script>
-      const dateEl = document.getElementById('id_date');
-      M.Datepicker.init(dateEl, {
-        format: 'yyyy-mm-dd',
-        defaultDate: new Date(),
-        setDefaultDate: true,
-        autoClose: true
-      });
-      const selectEl = document.getElementById('id_assignment');
-    M.FormSelect.init(selectEl);
-    </script>
+<script>
+  const dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
 
-</div>
+  const selectEl = document.getElementById('id_assignment');
+  M.FormSelect.init(selectEl);
+</script>
+
 {% endblock %}

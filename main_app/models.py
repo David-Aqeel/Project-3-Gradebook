@@ -2,12 +2,11 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
-
 class Student(models.Model):
   name = models.CharField(max_length=75)
-  name = models.CharField(max_length=50)
   grade_level = models.IntegerField()
 
   def __str__(self):
@@ -15,8 +14,7 @@ class Student(models.Model):
 
   def get_absolute_url(self):
     return reverse('students_detail', kwargs={'pk': self.id})
-
-
+  
 class Cohorts(models.Model):
     subject_name = models.CharField(max_length=50)
     note = models.TextField(max_length=150)
@@ -28,35 +26,29 @@ class Cohorts(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'cohort_id': self.id})
-    
-class Assignment(models.Model):
-  date = models.DateField('Due Date')
-  assignment = models.CharField(max_length=100)
-  grade = models.IntegerField()
-  cohort = models.ForeignKey(Cohorts, on_delete=models.CASCADE)
 
-  def __str__(self):
-    return f"{self.assignment()} on {self.date}"
+
+# class Assignment(models.Model):
+#   date = models.DateField('Due Date')
+#   assignment = models.CharField(max_length=100)
+#   grade = models.IntegerField()
+#   cohort = models.ForeignKey(Cohorts, on_delete=models.CASCADE)
+
+#   def __str__(self):
+#     return f"{self.assignment} on {self.date}"
   
-  class Meta:
-    ordering = ['-date']
+#   class Meta:
+#     ordering = ['-date']
     
 class Student_Grades(models.Model):
-    grade = models.IntegerField()
-    cohorts = models.ForeignKey(
-    Cohorts,
-    on_delete=models.CASCADE
-  )
-    students = models.ForeignKey(
-    Student,
-    on_delete=models.CASCADE
-  )
+    # grade = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(101)])
+    grade = models.CharField()
+    cohorts = models.ForeignKey(Cohorts, on_delete=models.CASCADE)
+    students = models.ForeignKey(Student, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.get_grade_display()}"
-    
-    class Meta:
-       ordering = ['-grade']
+      return f"Grade: {self.grade} - Cohort: {self.cohorts} - Student: {self.students}"
+   
         
 class Photo(models.Model):
   url = models.CharField(max_length=200)

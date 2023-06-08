@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Student_Grades, Assignment
+from .models import Student_Grades # Assignment
 
 class Student_Grades_Form(ModelForm):
   class Meta:
@@ -9,7 +9,7 @@ class Student_Grades_Form(ModelForm):
 
 
 
-class Assignment_Form(ModelForm):
-  class Meta:
-    model = Assignment
-    fields = ['date', 'assignment']
+# class Assignment_Form(ModelForm):
+#   class Meta:
+#     model = Assignment
+#     fields = ['date', 'assignment']
