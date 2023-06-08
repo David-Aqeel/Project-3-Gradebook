@@ -12,6 +12,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+
+def calculate_total_grade(student_grades):
+    total_grade = 0
+    for grade in student_grades:
+        if grade.grade:
+            total_grade += int(grade.grade)
+    return total_grade
+
 # Create your views here.
 def home(request):
     return render(request, "home.html")
@@ -104,12 +112,22 @@ def students_index(request):
 
 class StudentDetail(LoginRequiredMixin, DetailView):
     model = Student
-
+    
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        student = self.get_object()
-        context["student_grades_form"] = Student_Grades_Form()
-        return context
+         context = super().get_context_data(**kwargs)
+         student = self.get_object()
+         student_grades = Student_Grades.objects.filter(students=student)
+         total_grade = calculate_total_grade(student_grades)
+         context["student_grades"] = student_grades
+         context["total_grade"] = total_grade
+         context["student_grades_form"] = Student_Grades_Form()
+         return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     student = self.get_object()
+    #     context["student_grades_form"] = Student_Grades_Form()
+    #     return context
 
 
 class StudentCreate(LoginRequiredMixin, CreateView):
@@ -160,7 +178,7 @@ def detail(request, cohort_id):
         'student_grades': student_grades,
     }
 
-    return render(request, 'detail.html', context)
+    return render(request, 'cohorts/detail.html', context)
 
 def add_grade(request, cohort_id, student_id):
     if request.method == 'POST':
@@ -171,11 +189,11 @@ def add_grade(request, cohort_id, student_id):
         student_grade.save()
     return redirect('detail', cohort_id=cohort_id)
 
-# def delete_grade(request, cohort_id, grade_id):
-#     if request.method == 'POST':
-#         grade = Student_Grades.objects.get(id=grade_id)
-#         grade.delete()
-#     return redirect('detail', cohort_id=cohort_id)
+def delete_grade(request, cohort_id, grade_id):
+    if request.method == 'POST':
+        grade = Student_Grades.objects.get(id=grade_id)
+        grade.delete()
+    return redirect('detail', cohort_id=cohort_id)
 
 @login_required
 def add_photo(request, student_id):
@@ -211,3 +229,5 @@ def signup(request):
     form = UserCreationForm()
     context = {"form": form, "error_message": error_message}
     return render(request, "registration/signup.html", context)
+
+

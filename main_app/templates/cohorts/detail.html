@@ -33,9 +33,9 @@
         {% for student_grade in student.student_grades.all %}
           {% if student_grade.cohorts_id == cohort.id %}
             <p>Grade: {{ student_grade.grade }}</p>
-            <form action="{% url 'delete_grade' cohort.id student_grade.id %}" method="POST">
+            <!-- <form action="{% url 'delete_grade' cohort.id student_grade.id %}" method="POST"> -->
               {% csrf_token %}
-              <button type="submit" class="btn">Delete Grade</button>
+              <!-- <button type="submit" class="btn">Delete Grade</button> -->
             </form>
           {% endif %}
         {% empty %}
