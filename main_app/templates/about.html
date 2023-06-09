@@ -1,8 +1,53 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
 {% block content %}
-<h1>About GradeBook</h1>
-<hr />
+  <style>
+    .about-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 75vh;
+    }
 
-<footer>All Rights Reserved, &copy; 2023 GradeBook</footer>
+    .about-card {
+      max-width: 500px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-title {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .about-content {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .about-footer {
+      margin-top: 40px;
+    }
+  </style>
+
+  <div class="about-container">
+    <div class="about-card">
+      <h1 class="about-title">About GradeBook</h1>
+      <hr />
+
+      <div class="about-content">
+        <p>
+          GradeBook is a platform for managing grades and student information.
+          It provides an easy-to-use interface for teachers and administrators
+          to track and organize student grades, create cohorts, and manage student records.
+        </p>
+      </div>
+
+      <footer class="about-footer">
+        All Rights Reserved, &copy; 2023 GradeBook
+      </footer>
+    </div>
+  </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 import os
 import uuid
 import boto3
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cohorts, Student, Student_Grades, Photo
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
@@ -64,6 +64,7 @@ def cohorts_index(request):
 
 @login_required
 def cohorts_detail(request, cohort_id):
+    cohort = get_object_or_404(Cohorts, id=cohort_id)
     cohort = Cohorts.objects.get(id=cohort_id)
     print("These are cohort.students.all()")
     print(cohort.students.all())

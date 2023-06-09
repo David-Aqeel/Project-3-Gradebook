@@ -1,17 +1,53 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+  .students-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+  }
 
-<h1>Students List</h1>
+  .student-card {
+    max-width: 300px;
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background-color: #545353;
+    transition: transform 0.3s ease;
+  }
 
-{% for student in students %}
+  .student-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .student-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .grade-level {
+    font-size: 16px;
+    color: #f9f5f5;
+  }
+</style>
+
+<h1>Student List</h1>
+
+<div class="students-list">
+  {% for student in students %}
   <a href="{% url 'students_detail' student.id %}">
-    <div class="card">
+    <div class="student-card">
       <div class="card-content">
-        <span class="card-title">{{ student.name }}</span>
-        <p>Grade Level: {{ student.grade_level }}</p>
+        <span class="student-name">{{ student.name }}</span>
+        <p class="grade-level">Grade Level: {{ student.grade_level }}</p>
       </div>
     </div>
   </a>
-{% endfor %}
+  {% endfor %}
+</div>
 
 {% endblock %}

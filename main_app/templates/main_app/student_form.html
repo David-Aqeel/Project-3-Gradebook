@@ -1,21 +1,67 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+  .form-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f5f5f5;
+  }
 
-{% if object %}
-<h1>Edit <span class="teal-text">{{object.name}}</span></h1>
-{% else %}
-<h1>Add Student</h1>
-{% endif %}
-<!-- Leaving the action empty makes the form post to the same url used to display it -->
-<form action="" method="post">
-<!-- Django requires the following for security purposes -->
-{% csrf_token %}
-<table>
-  <!-- Render the inputs inside of <tr>s & <td>s -->
-  {{ form.as_table }}
-</table>
-<input type="submit" value="Submit!" class="btn">
-</form>
+  .form-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .form-table {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .form-table th {
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .form-table td {
+    padding: 10px;
+  }
+
+  .form-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form-submit .btn {
+    margin-top: 20px;
+  }
+</style>
+
+<div class="form-container">
+  {% if object %}
+  <h1>Edit <span class="teal-text">{{ object.name }}</span></h1>
+  {% else %}
+  <h1>Add Student</h1>
+  {% endif %}
+  <!-- Leaving the action empty makes the form post to the same URL used to display it -->
+  <form action="" method="post">
+    <!-- Django requires the following for security purposes -->
+    {% csrf_token %}
+    <table class="form-table">
+      <!-- Render the inputs inside of <tr>s & <td>s -->
+      {{ form.as_table }}
+    </table>
+    <div class="form-submit">
+      <input type="submit" value="Submit!" class="btn">
+    </div>
+  </form>
+</div>
 
 {% endblock %}
