@@ -92,14 +92,6 @@
   </div>
 
   <script>
-    const dateEl = document.getElementById('id_date');
-    M.Datepicker.init(dateEl, {
-      format: 'yyyy-mm-dd',
-      defaultDate: new Date(),
-      setDefaultDate: true,
-      autoClose: true
-    });
-
     {% for student in cohort.students.all %}
       const selectEl{{ student.id }} = document.getElementById('grade_input_{{ student.id }}');
       M.FormSelect.init(selectEl{{ student.id }});

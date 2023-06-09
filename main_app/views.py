@@ -101,17 +101,6 @@ class CohortDelete(LoginRequiredMixin, DeleteView):
     success_url = "/cohorts"
 
 
-# def add_assignment(request, cohort_id):
-#     form = Assignment_Form(request.POST)
-#     # validate the form
-#     if form.is_valid():
-#         # don't save the form to the db until it
-#         # has the cat_id assigned
-#         new_assignment = form.save(commit=False)
-#         new_assignment.cohort_id = cohort_id
-#         new_assignment.save()
-#     return redirect("detail", cohort_id=cohort_id)
-
 
 def students_index(request):
     students = Student.objects.all()
