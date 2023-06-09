@@ -7,7 +7,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class Student(models.Model):
   name = models.CharField(max_length=75)
-  grade_level = models.IntegerField()
+  grade_level = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(12)]
+    )
 
   def __str__(self):
     return self.name

@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def calculate_gpa(student_grades):
-    print('This is calculate_gpa')
+    print("This is calculate_gpa")
     print(student_grades)
     grade_points = {
         "A+": 4.0,
@@ -36,8 +36,8 @@ def calculate_gpa(student_grades):
 
     grade_sum = 0.0
     total_subjects = len(set([grade.cohorts for grade in student_grades]))
-    print('This is  total_subjects')
-    print( total_subjects)
+    print("This is  total_subjects")
+    print(total_subjects)
 
     for student_grade in student_grades:
         grade = student_grade.grade
@@ -223,23 +223,26 @@ class StudentDelete(LoginRequiredMixin, DeleteView):
 #     new_student_grades.save()
 #     return redirect("students_detail", pk=student_id)
 
+
 @login_required
 def add_grade(request, cohort_id, student_id):
     if request.method == "POST":
-        grade = request.POST["grade"]
-        print('This is add_grade')
+        print("This is request.POST:", request.POST)
+        grade = request.POST.get("grade")
+        print("This is add_grade")
         print(grade)
-        # student = Student.objects.get(id=student_id)
-        # cohort = Cohorts.objects.get(id=cohort_id)
-        # student_grade = Student_Grades(grade=grade, cohorts=cohort, students=student)
-        # student_grade.save()
-        created = Student_Grades.objects.update_or_create(
-            students_id=student_id,
-            cohorts_id=cohort_id,
-            defaults={"grade":grade}
+        if grade is not None:
+            created = Student_Grades.objects.update_or_create(
+                students_id=student_id, cohorts_id=cohort_id, defaults={"grade": grade}
             )
     return redirect("detail", cohort_id=cohort_id)
 
+
+# THIS CODE ORIGINALLY WENT INSIDE ADD_GRADE
+# student = Student.objects.get(id=student_id)
+# cohort = Cohorts.objects.get(id=cohort_id)
+# student_grade = Student_Grades(grade=grade, cohorts=cohort, students=student)
+# student_grade.save()
 
 # def delete_grade(request, cohort_id, grade_id):
 #     if request.method == "POST":
