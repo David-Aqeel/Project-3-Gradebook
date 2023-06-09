@@ -14,8 +14,7 @@
               {% csrf_token %}
               <div class="center-align">
                 <input type="submit" value="Yes - Delete!" class="btn red">
-                <a href="{% url 'detail' object.id %}" class="btn">Cancel</a>
-              </div>
+                <a href="{% url 'students_detail' pk=object.id %}" class="btn">Cancel</a>              </div>
             </form>
           </div>
         </div>
