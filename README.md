@@ -10,7 +10,7 @@ Our group built a Student Gradebook app for teachers. This app lets teachers cre
 
 ![Screenshot 3](/imgs/ScreenShot3.png)
 
-![Screenshot 4](/imgs/ScreenShot4.png)
+![Screenshot 5](/imgs/ScreenShot5.png)
 
 
 # Technologies Used:
