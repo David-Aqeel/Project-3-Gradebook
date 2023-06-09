@@ -1,116 +1,108 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
+
 {% block content %}
+  <h1>Cohort Details</h1>
 
-<h1>Cohort Details</h1>
-
-<div class="row">
-  <div class="col s6">
-    <div class="card">
-      <div class="card-content">
-        <span class="card-title">{{ cohort.subject_name }}</span>
-        <p>Notes: {{ cohort.note }}</p>
-      </div>
-      <div class="card-action">
-        <a href="{% url 'cohorts_update' cohort.id %}">Edit</a>
-        <a href="{% url 'cohorts_delete' cohort.id %}">Delete</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<hr>
-
-<div class="row">
-  <div class="col s6">
-<h3>{{ cohort.subject_name }}'s Students</h3>
-{% if cohort.students.count %}
-  {% for student in cohort.students.all %}
-    <div class="card">
-      <div class="card-content">
-        <span class="card-title">
-          {{ student.name }}
-        </span>
-        {% for student_grade in student.student_grades.all %}
-          {% if student_grade.cohorts_id == cohort.id %}
-            <p>Grade: {{ student_grade.grade }}</p>
-             {% csrf_token %} 
-            </form>
-          {% endif %}
-        {% empty %}
-        
-        <form action="{% url 'add_grade' cohort.id student.id %}" method="POST">
-          {% csrf_token %}
-          <div class="input-field col s6">
-              <select name="grade" id="grade_input_{{ student.id }}">
-                <option value="" disabled selected>Select grade</option>
-                <option value="A+">A+</option>
-                <option value="A">A</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B">B</option>
-                <option value="B-">B-</option>
-                <option value="C+">C+</option>
-                <option value="C">C</option>
-                <option value="C-">C-</option>
-                <option value="D+">D+</option>
-                <option value="D">D</option>
-                <option value="F">F</option>
-              </select>
-              </div>
-                <button type="submit" class="btn">Add Grade</button>
-              </form>
-              {% endfor %}
-      </div>
-      <div class="card-action">
-        <form action="{% url 'unassoc_student' cohort.id student.id %}" method="POST">
-          {% csrf_token %}
-          <button type="submit" class="btn">Remove</button>
-        </form>
-      </div>
-    </div>
-  {% endfor %}
-{% else %}
-  <h5>No Students 👨🏼‍🏫</h5>
-{% endif %}
-  </div>
-
-  <div class="col s6">
-    <h3>Available Students</h3>
-    {% if students_cohort_doesnt_have.count %}
-      {% for student in students_cohort_doesnt_have %}
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">
-              {{ student.name }}
-            </span>
-          </div>
-          <div class="card-action">
-            <form action="{% url 'assoc_student' cohort.id student.id %}" method="POST">
-              {% csrf_token %}
-              <button type="submit" class="btn">Add</button>
-            </form>
-          </div>
+  <div class="row">
+    <div class="col s6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">{{ cohort.subject_name }}</span>
+          <p>Notes: {{ cohort.note }}</p>
         </div>
-      {% endfor %}
-    {% else %}
-      <h5>{{ cohort.name }} Already Has All Available Students</h5>
-    {% endif %}
+        <div class="card-action">
+          <a href="{% url 'cohorts_update' cohort.id %}">Edit</a>
+          <a href="{% url 'cohorts_delete' cohort.id %}">Delete</a>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<script>
-  const dateEl = document.getElementById('id_date');
-  M.Datepicker.init(dateEl, {
-    format: 'yyyy-mm-dd',
-    defaultDate: new Date(),
-    setDefaultDate: true,
-    autoClose: true
-  });
-{% for student in cohort.students.all %}
-  const selectEl{{ student.id }} = document.getElementById('grade_input_{{ student.id }}');
-  M.FormSelect.init(selectEl{{ student.id }});
-{% endfor %}
- 
-</script>
+  <hr>
 
+  <div class="row">
+    <div class="col s6">
+      <h3>{{ cohort.subject_name }}'s Students</h3>
+      {% if cohort.students.count %}
+        {% for student in cohort.students.all %}
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">{{ student.name }}</span>
+              {% for student_grade in student.student_grades.all %}
+                {% if student_grade.cohorts_id == cohort.id %}
+                  <p>Grade: {{ student_grade.grade }}</p>
+                {% endif %}
+              {% empty %}
+                <form action="{% url 'add_grade' cohort.id student.id %}" method="POST">
+                  {% csrf_token %}
+                  <div class="input-field col s6">
+                    <select name="grade" id="grade_input_{{ student.id }}">
+                      <option value="" disabled selected>Select grade</option>
+                      <option value="A+">A+</option>
+                      <option value="A">A</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B">B</option>
+                      <option value="B-">B-</option>
+                      <option value="C+">C+</option>
+                      <option value="C">C</option>
+                      <option value="C-">C-</option>
+                      <option value="D+">D+</option>
+                      <option value="D">D</option>
+                      <option value="F">F</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn">Add Grade</button>
+                </form>
+              {% endfor %}
+            </div>
+            <div class="card-action">
+              <form action="{% url 'unassoc_student' cohort.id student.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn">Remove</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <h5>No Students 👨🏼‍🏫</h5>
+      {% endif %}
+    </div>
+
+    <div class="col s6">
+      <h3>Available Students</h3>
+      {% if students_cohort_doesnt_have.count %}
+        {% for student in students_cohort_doesnt_have %}
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">{{ student.name }}</span>
+            </div>
+            <div class="card-action">
+              <form action="{% url 'assoc_student' cohort.id student.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn">Add</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <h5>{{ cohort.name }} Already Has All Available Students</h5>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    const dateEl = document.getElementById('id_date');
+    M.Datepicker.init(dateEl, {
+      format: 'yyyy-mm-dd',
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    });
+
+    {% for student in cohort.students.all %}
+      const selectEl{{ student.id }} = document.getElementById('grade_input_{{ student.id }}');
+      M.FormSelect.init(selectEl{{ student.id }});
+    {% endfor %}
+  </script>
 {% endblock %}
