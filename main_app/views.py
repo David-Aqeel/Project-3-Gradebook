@@ -13,8 +13,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def calculate_gpa(student_grades):
-    print("This is calculate_gpa")
-    print(student_grades)
     grade_points = {
         "A+": 4.0,
         "A": 4.0,
@@ -36,8 +34,6 @@ def calculate_gpa(student_grades):
 
     grade_sum = 0.0
     total_subjects = len(set([grade.cohorts for grade in student_grades]))
-    print("This is  total_subjects")
-    print(total_subjects)
 
     for student_grade in student_grades:
         grade = student_grade.grade
@@ -66,21 +62,9 @@ def cohorts_index(request):
 def cohorts_detail(request, cohort_id):
     cohort = get_object_or_404(Cohorts, id=cohort_id)
     cohort = Cohorts.objects.get(id=cohort_id)
-    print("These are cohort.students.all()")
-    print(cohort.students.all())
     id_list = cohort.students.all().values_list("id")
     students_cohort_doesnt_have = Student.objects.exclude(id__in=id_list)
     student_grades = Student_Grades.objects.filter(cohorts=cohort_id)
-    #  {% for student_grade in student.student_grades.all %}
-    print("These are the student grades in the detail view")
-    print(student_grades)
-    #   {% if student_grade.cohorts_id == cohort.id %}
-    # print("These are student_grade.cohorts_id")
-    # print(student_grades[0])
-    # # <p>Grade: {{ student_grade.grade }}</p>
-    # print("These are student_grade.grade")
-    # print(student_grades[0].grade)
-
     return render(
         request,
         "cohorts/detail.html",
@@ -90,35 +74,6 @@ def cohorts_detail(request, cohort_id):
             "student_grades": student_grades,
         },
     )
-
-
-# THIS IS NOT BEING USED AT ALL
-# def detail(request, cohort_id):
-#     cohort = Cohorts.objects.get(id=cohort_id)
-#     students = cohort.students.all()
-#     student_grades = Student_Grades.objects.filter(student__in=students)
-#     gpa = calculate_gpa(student_grades)
-
-
-#     context = {
-#         'cohort': cohort,
-#         'students': students,
-#         'student_grades': student_grades,
-#         'gpa': gpa
-#     }
-
-#     return render(request, 'cohorts/detail.html', context)
-
-# class CohortCreate(CreateView):
-#     id_list = cohort.students.all().values_list("id")
-#     students_cohort_doesnt_have = Student.objects.exclude(id__in=id_list)
-#     return render(
-#         request,
-#         "cohorts/detail.html",
-#         {
-#             "cohort": cohort,
-#         },
-#     )
 
 
 class CohortCreate(LoginRequiredMixin, CreateView):
@@ -163,10 +118,6 @@ def students_index(request):
     return render(request, "main_app/student_list.html", {"students": students})
 
 
-# class StudentList(ListView):
-#   model = Student
-
-
 class StudentDetail(LoginRequiredMixin, DetailView):
     model = Student
 
@@ -180,13 +131,6 @@ class StudentDetail(LoginRequiredMixin, DetailView):
         context["student_grades_form"] = Student_Grades_Form()
         return context
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     student = self.get_object()
-    #     context["student_grades_form"] = Student_Grades_Form()
-    #     return context
-
-
 class StudentCreate(LoginRequiredMixin, CreateView):
     model = Student
     fields = "__all__"
@@ -194,14 +138,11 @@ class StudentCreate(LoginRequiredMixin, CreateView):
 
 def assoc_student(request, cohort_id, student_id):
     Cohorts.objects.get(id=cohort_id).students.add(student_id)
-    # Student_Grades.objects.get(cohort_id=cohort_id).remove()
     return redirect("detail", cohort_id=cohort_id)
 
 
 def unassoc_student(request, cohort_id, student_id):
     Cohorts.objects.get(id=cohort_id).students.remove(student_id)
-    # Student_Grades.objects.get(cohort_id=cohort_id).remove()
-    # Student_Grades.objects.get(grade)
     return redirect("detail", cohort_id=cohort_id)
 
 
@@ -213,17 +154,6 @@ class StudentUpdate(LoginRequiredMixin, UpdateView):
 class StudentDelete(LoginRequiredMixin, DeleteView):
     model = Student
     success_url = "/students"
-
-
-@login_required
-# def add_student_grades(request, student_id, cohort_id):
-#     form = Student_Grades_Form(request.POST)
-#     new_student_grades = form.save(commit=False)
-#     new_student_grades.student_id = student_id
-#     new_student_grades.cohort_id = cohort_id
-#     new_student_grades.save()
-#     return redirect("students_detail", pk=student_id)
-
 
 @login_required
 def add_grade(request, cohort_id, student_id):
@@ -237,20 +167,6 @@ def add_grade(request, cohort_id, student_id):
                 students_id=student_id, cohorts_id=cohort_id, defaults={"grade": grade}
             )
     return redirect("detail", cohort_id=cohort_id)
-
-
-# THIS CODE ORIGINALLY WENT INSIDE ADD_GRADE
-# student = Student.objects.get(id=student_id)
-# cohort = Cohorts.objects.get(id=cohort_id)
-# student_grade = Student_Grades(grade=grade, cohorts=cohort, students=student)
-# student_grade.save()
-
-# def delete_grade(request, cohort_id, grade_id):
-#     if request.method == "POST":
-#         grade = Student_Grades.objects.get(id=grade_id)
-#         grade.delete()
-#     return redirect("detail", cohort_id=cohort_id)
-
 
 @login_required
 def add_photo(request, student_id):
@@ -282,6 +198,7 @@ def signup(request):
             return redirect("index")
         else:
             error_message = "Invalid sign up - try again"
+            
     # A bad POST or a GET request, so render signup template
     form = UserCreationForm()
     context = {"form": form, "error_message": error_message}

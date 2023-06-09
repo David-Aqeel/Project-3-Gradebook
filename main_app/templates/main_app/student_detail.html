@@ -36,12 +36,12 @@
     <div class="card-content">
       <p>GPA: {{ gpa }}</p>
       
-      <span class="card-title">Student Cohorts</span>
+      <span class="card-title">Student Courses</span>
       {% if student_grades %}
         <ul>
           {% for grade in student_grades %}
             <li>
-              Grade: {{ grade.grade }} - Cohort: {{ grade.cohorts.subject_name }}
+              Grade: {{ grade.grade }} - Course: {{ grade.cohorts.subject_name }}
             </li>
           {% endfor %}
         </ul>
