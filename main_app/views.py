@@ -124,11 +124,9 @@ class StudentCreate(LoginRequiredMixin, CreateView):
     model = Student
     fields = "__all__"
 
-
 def assoc_student(request, cohort_id, student_id):
     Cohorts.objects.get(id=cohort_id).students.add(student_id)
     return redirect("detail", cohort_id=cohort_id)
-
 
 def unassoc_student(request, cohort_id, student_id):
     Cohorts.objects.get(id=cohort_id).students.remove(student_id)

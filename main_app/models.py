@@ -10,7 +10,6 @@ class Student(models.Model):
   grade_level = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(12)]
     )
-
   def __str__(self):
     return self.name
 
@@ -25,7 +24,6 @@ class Cohorts(models.Model):
     
     def __str__(self):
         return f'{self.subject_name} ({self.id})'
-    
     def get_absolute_url(self):
         return reverse('detail', kwargs={'cohort_id': self.id})
     
@@ -52,7 +50,6 @@ class Student_Grades(models.Model):
   def __str__(self):
       return f"Grade: {self.grade} - Cohort: {self.cohorts} - Student: {self.students}"
    
-        
 class Photo(models.Model):
   url = models.CharField(max_length=200)
   student = models.ForeignKey(Student, on_delete=models.CASCADE)
