@@ -5,8 +5,11 @@ Our group built a Student Gradebook app for teachers. This app lets teachers cre
 # Screenshot(s):
 
 ![Screenshot 1](/imgs/ScreenShot1.png)
+
 ![Screenshot 2](/imgs/ScreenShot2.png)
+
 ![Screenshot 3](/imgs/ScreenShot3.png)
+
 ![Screenshot 4](/imgs/ScreenShot4.png)
 
 
