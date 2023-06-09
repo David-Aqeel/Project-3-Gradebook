@@ -1,5 +1,5 @@
 # STUDENT GRADEBOOK
-    Our group built a Student Gradebook app for teachers. This app lets teachers create courses, add courses to their course list, create students, and add students to their student list. The students can also be added to each class, and the teacher can update their grade as well as view it in the student's details page. 
+    Our group built a Student Gradebook app for teachers. This app lets teachers create courses, add courses to their course list, create students, and add students to their student list. The students can also be added to each class, and the teacher can update their grade as well as view it in the student's details page. This app can be modified for a variety of users, like upper administration, parents, and even students themselves.
 
 
 # Screenshot(s):
