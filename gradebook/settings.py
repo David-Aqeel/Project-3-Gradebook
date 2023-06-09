@@ -13,12 +13,22 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 import environ
+import os
+import dj_database_url
 
-environ.Env()
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG = 'RENDER' not in os.environ
+
+)
 environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,6 +41,9 @@ SECRET_KEY = 'django-insecure-ca_^g$s&#a(#9jl0%sj052-)6_njrf@%21)#^n8d&gd$_aqq_%
 DEBUG = True
 
 ALLOWED_HOSTS = []
+RENDER_EXTERNAL_HOSTNAME=os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 
 # Application definition
@@ -53,6 +66,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'gradebook.urls'
@@ -79,12 +94,21 @@ WSGI_APPLICATION = 'gradebook.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gradebook',
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'neondb',
+    'USER': 'David-Aqeel',
+    'PASSWORD': 's59xHZimEeBp',
+    'HOST': 'ep-steep-frog-323649.us-east-1.aws.neon.tech',
+    'PORT': '5432',
+    'OPTIONS': {'sslmode': 'require'},
+
+  }
 }
+
+DATABASE_URL='postgres://David-Aqeel:s59xHZimEeBp@ep-steep-frog-323649.us-east-1.aws.neon.tech/neondb?sslmode=require'
 
 
 # Password validation
@@ -122,6 +146,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+if not DEBUG:
+    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+    # Turn on WhiteNoise storage backend that takes care of compressing static files
+    # and creating unique names for each version so they can safely be cached forever.
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = '/cohorts/'
 
