@@ -33,9 +33,7 @@
         {% for student_grade in student.student_grades.all %}
           {% if student_grade.cohorts_id == cohort.id %}
             <p>Grade: {{ student_grade.grade }}</p>
-            <!-- <form action="{% url 'delete_grade' cohort.id student_grade.id %}" method="POST"> -->
-              {% csrf_token %}
-              <!-- <button type="submit" class="btn">Delete Grade</button> -->
+             {% csrf_token %} 
             </form>
           {% endif %}
         {% empty %}
@@ -43,7 +41,6 @@
         <form action="{% url 'add_grade' cohort.id student.id %}" method="POST">
           {% csrf_token %}
           <div class="input-field col s6">
-          <!-- <input type="text" name="grade" placeholder="Enter Grade"> -->
               <select name="grade" id="grade_input_{{ student.id }}">
                 <option value="" disabled selected>Select grade</option>
                 <option value="A+">A+</option>
@@ -113,11 +110,7 @@
   const selectEl{{ student.id }} = document.getElementById('grade_input_{{ student.id }}');
   M.FormSelect.init(selectEl{{ student.id }});
 {% endfor %}
-
-  // {% for student in cohort.students.all %}
-  //   const selectEl{{ student.id }} = document.getElementById('grade_input_{{ student.id }}');
-  //   M.FormSelect.init(selectEl{{ student.id }});
-  // {% endfor %}
+ 
 </script>
 
 {% endblock %}

@@ -28,19 +28,6 @@ class Cohorts(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'cohort_id': self.id})
-
-
-# class Assignment(models.Model):
-#   date = models.DateField('Due Date')
-#   assignment = models.CharField(max_length=100)
-#   grade = models.IntegerField()
-#   cohort = models.ForeignKey(Cohorts, on_delete=models.CASCADE)
-
-#   def __str__(self):
-#     return f"{self.assignment} on {self.date}"
-  
-#   class Meta:
-#     ordering = ['-date']
     
 class Student_Grades(models.Model):
   

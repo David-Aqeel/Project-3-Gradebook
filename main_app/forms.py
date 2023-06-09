@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Student_Grades # Assignment
+from .models import Student_Grades 
 
 class Student_Grades_Form(ModelForm):
    grade = forms.ChoiceField(choices=Student_Grades.GRADE_CHOICES)
@@ -11,7 +11,3 @@ class Student_Grades_Form(ModelForm):
 
 
 
-# class Assignment_Form(ModelForm):
-#   class Meta:
-#     model = Assignment
-#     fields = ['date', 'assignment']
