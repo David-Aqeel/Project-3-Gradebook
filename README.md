@@ -4,16 +4,16 @@
 
 # Screenshot(s):
 
-![Screenshot 1](/imgs/Screenshot1.png)
-![Screenshot 2](/imgs/Screenshot2.png)
-![Screenshot 3](/imgs/Screenshot3.png)
-![Screenshot 4](/imgs/Screenshot4.png)
-![Screenshot 5](/imgs/Screenshot5.png)
-![Screenshot 6](/imgs/Screenshot6.png)
-![Screenshot 7](/imgs/Screenshot7.png)
-![Screenshot 8](/imgs/Screenshot8.png)
-![Screenshot 9](/imgs/Screenshot9.png)
-![Screenshot 10](/imgs/Screenshot10.png)
+![Screenshot 1](/imgs/ScreenShot1.png)
+![Screenshot 2](/imgs/ScreenShot2.png)
+![Screenshot 3](/imgs/ScreenShot3.png)
+![Screenshot 4](/imgs/ScreenShot4.png)
+![Screenshot 5](/imgs/ScreenShot5.png)
+![Screenshot 6](/imgs/ScreenShot6.png)
+![Screenshot 7](/imgs/ScreenShot7.png)
+![Screenshot 8](/imgs/ScreenShot8.png)
+![Screenshot 9](/imgs/ScreenShot9.png)
+![Screenshot 10](/imgs/ScreenShot10.png)
 
 # Technologies Used:
 
